@@ -1,0 +1,10 @@
+.buildpath
+.docker/volumes
+.env
+*.swp
+.phpunit.result.cache
+.project
+.settings/
+vendor/
+ojs
+tests/logs
