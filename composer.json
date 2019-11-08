@@ -2,7 +2,7 @@
     "name": "lyseontech/ojs-sdk",
     "description": "SDK package for OJS",
     "keywords": ["ojs", "sdk"],
-    "license" : "GPL3",
+    "license" : "GPL-3.0-only",
     "authors" : [
         {
             "name": "Lívia Gouvêa",
