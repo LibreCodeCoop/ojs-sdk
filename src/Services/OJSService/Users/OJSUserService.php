@@ -11,7 +11,7 @@ class OJSUserService
     private $ojsBasePath;
     private $_client;
 
-    public function __construct(\GuzzleHttp\Client $client)
+    public function __construct(\GuzzleHttp\Client $client = null)
     {
         $this->_client = $client;
     }
@@ -74,27 +74,44 @@ class OJSUserService
      * @param String $senha
      * @return Boolean
      **/
-    public function createUser(String $nome, String $sobrenome, String $email, String $login, String $password, string $telefone, string $endereco)
+    public function createUser(array $data)
     {
         try {
             OjsProvider::getApplication();
             $userDao = DAORegistry::getDAO('UserDAO');
             $userToImport = new \User();
-            $data = [
-                'username' => $login,
-                'password' => $password,
-                'email' => $email,
-                'phone' => $telefone,
-                'mailingAddress' => $endereco
-            ];
+            if (isset($data['settings'])) {
+                $dataUserSettings = $data['settings'];
+                unset($data['settings']);
+                $userSettingsDao = DAORegistry::getDAO('UserSettingsDAO');
+            }
             $userToImport->setAllData($data);
-            $userToImport->setPassword(\Validation::encryptCredentials($userToImport->getUsername(), $password));
-            $userDao->insertObject($userToImport);
+            $userToImport->setPassword(\Validation::encryptCredentials($userToImport->getUsername(),$data['password']));
+            $userId = $userDao->insertObject($userToImport);
+            if (isset($userSettingsDao)) {
+                foreach ($dataUserSettings as $name => $value){
+                    $userSettingsDao->updateSetting($userId,$name, $value);
+                }
+            }
             $userGroupDao = DAORegistry::getDAO('UserGroupDAO');
-            $userGroupDao->assignUserToGroup($userToImport->getId(), 14);
+            foreach($data['groups'] as $groupId){
+                $userGroupDao->assignUserToGroup($userToImport->getId(), $groupId);
+            }
+            
         } catch (\Exception $e) {
             throw new \Exception("Error creating OJS user: $e");
         }
          return true;
+    }
+    
+    public function changePassword(String $email, String $password) 
+    {
+        OjsProvider::getApplication();
+        $userDao = DAORegistry::getDAO('UserDAO');
+        $user = $userDao->getUserByEmail($email);
+        if ($user) {
+            $user->setPassword(\Validation::encryptCredentials($user->getUsername(), $password));
+            $userDao->updateObject($user);
+        }
     }
 }
