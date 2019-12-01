@@ -10,6 +10,7 @@ class OjsProvider
      */
     public static function getApplication()
     {
+        define('SESSION_DISABLE_INIT', true);
         define('INDEX_FILE_LOCATION', getenv('WEB_DOCUMENT_ROOT') .'/ojs/index.php');
         define('ENV_SEPARATOR', strtolower(substr(PHP_OS, 0, 3)) == 'win' ? ';' : ':');
         if (!defined('DIRECTORY_SEPARATOR')) {
@@ -41,8 +42,18 @@ class OjsProvider
         // Initialize the application environment
         import('classes.core.Application');
         $application = new \Application();
+        import('lib.pkp.classes.core.PKPRequest');
+        import('lib.pkp.classes.core.PKPRouter');
+        import('lib.pkp.classes.core.Registry');
+        $request = new \PKPRequest();
+        $router = new \PKPRouter();
+        $router->setApplication($application);
+        $request->setRouter($router);
+        \Registry::set('request', $request);
+        \AppLocale::$request = \Registry::get('request', true, null);
+        $request = \AppLocale::$request;
+        $plugins = PluginRegistry::loadCategory('generic', true, 1);
         chdir($currentDirectory);
-        $plugins = PluginRegistry::loadCategory('generic', true);
         return $application;
     }
 }
