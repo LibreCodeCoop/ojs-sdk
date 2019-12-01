@@ -79,25 +79,14 @@ class OJSUserService
         try {
             OjsProvider::getApplication();
             $userDao = DAORegistry::getDAO('UserDAO');
-            $userToImport = new \User();
-            if (isset($data['settings'])) {
-                $dataUserSettings = $data['settings'];
-                unset($data['settings']);
-                $userSettingsDao = DAORegistry::getDAO('UserSettingsDAO');
-            }
-            $userToImport->setAllData($data);
-            $userToImport->setPassword(\Validation::encryptCredentials($userToImport->getUsername(),$data['password']));
-            $userId = $userDao->insertObject($userToImport);
-            if (isset($userSettingsDao)) {
-                foreach ($dataUserSettings as $name => $value){
-                    $userSettingsDao->updateSetting($userId,$name, $value);
-                }
-            }
+            $user = new \User();
+            $user->setAllData($data);
+            $user->setPassword(\Validation::encryptCredentials($user->getUsername(),$data['password']));
+            $userId = $userDao->insertObject($user);
             $userGroupDao = DAORegistry::getDAO('UserGroupDAO');
-            foreach($data['groups'] as $groupId){
-                $userGroupDao->assignUserToGroup($userToImport->getId(), $groupId);
+            foreach ($data['groups'] as $groupId) {
+                $userGroupDao->assignUserToGroup($userId, $groupId);
             }
-            
         } catch (\Exception $e) {
             throw new \Exception("Error creating OJS user: $e");
         }
