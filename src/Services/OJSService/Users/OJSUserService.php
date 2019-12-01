@@ -114,13 +114,18 @@ class OJSUserService
             $userDao->updateObject($user);
         }
     }
-    public function getUniqueUsername(String $username){
+    public function getUniqueUsername(String $username)
+    {
         OjsProvider::getApplication();
-        $userDao = DAORegistry::getDAO('UserDAO');        
-        $i = 0;
-        while($userDao->userExistsByUsername($username.$i)){
-            $i++;            
+        $userDao = DAORegistry::getDAO('UserDAO');
+        $i = '';
+        while ($userDao->userExistsByUsername($username.$i)) {
+            if ($i === '') {
+                $i = 0;
+            } else {
+                $i++;
+            }
         }
-        return $username.$i;        
-    }      
+        return $username.$i;
+    }
 }
