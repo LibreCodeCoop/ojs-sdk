@@ -1,6 +1,8 @@
 <?php
 namespace OjsSdk\Providers\Ojs;
 
+use PluginRegistry;
+
 class OjsProvider
 {
     /**
@@ -40,6 +42,7 @@ class OjsProvider
         import('classes.core.Application');
         $application = new \Application();
         chdir($currentDirectory);
+        $plugins = PluginRegistry::loadCategory('generic', true);
         return $application;
     }
 }
