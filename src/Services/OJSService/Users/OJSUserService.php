@@ -74,18 +74,26 @@ class OJSUserService
      * @param String $senha
      * @return Boolean
      **/
-    public function createUser(array $data)
+    public function createUpdateUser(array $data)
     {
         try {
             OjsProvider::getApplication();
             $userDao = DAORegistry::getDAO('UserDAO');
-            $user = new \User();
-            $user->setAllData($data);
-            $user->setPassword(\Validation::encryptCredentials($user->getUsername(),$data['password']));
-            $userId = $userDao->insertObject($user);
-            $userGroupDao = DAORegistry::getDAO('UserGroupDAO');
-            foreach ($data['groups'] as $groupId) {
-                $userGroupDao->assignUserToGroup($userId, $groupId);
+            $user = $userDao->getUserByEmail($data['email']);
+            if(is_null($user)){            
+                $user = new \User();
+                $user->setAllData($data);
+                $user->setPassword(\Validation::encryptCredentials($user->getUsername(),$data['password']));
+                $userId = $userDao->insertObject($user);
+                $userGroupDao = DAORegistry::getDAO('UserGroupDAO');
+                foreach ($data['groups'] as $groupId) {
+                    $userGroupDao->assignUserToGroup($userId, $groupId);
+                }
+            }else{
+                $id = $user->getId();
+                $user->setAllData($data);
+                $user->setId($id);
+                $userDao->updateObject($user);                
             }
         } catch (\Exception $e) {
             throw new \Exception("Error creating OJS user: $e");
