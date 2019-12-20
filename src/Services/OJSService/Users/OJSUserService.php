@@ -32,7 +32,7 @@ class OJSUserService
         if (empty($username) || empty($password)) {
             throw new \Exception(__CLASS__ . ':' . __METHOD__ . ':: ' . 'Username and password are required.');
         }
-        $requestUri = "/index.php/csp/login/signIn";
+        $requestUri = getenv('OJS_LOGIN_URL');
 
         $response = $this->_client->request('POST', $requestUri, [
             'cookies' => $cookieJar,
