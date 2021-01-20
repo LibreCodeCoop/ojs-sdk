@@ -8,7 +8,7 @@ RUN apt-get install -y git libpq-dev libzip-dev \
     && docker-php-ext-install pdo pdo_mysql mysqli \
     && docker-php-ext-install zip
 
-RUN pecl install xdebug-2.8.0beta2 \
+RUN pecl install xdebug-2.9.8 \
     && docker-php-ext-enable xdebug
 
 RUN curl https://getcomposer.org/composer.phar --output /usr/bin/composer
