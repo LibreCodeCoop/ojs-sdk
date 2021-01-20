@@ -2,9 +2,16 @@ FROM php:7.4-fpm
 
 RUN apt-get update
 
-RUN apt-get install -y git libpq-dev libzip-dev \
+RUN apt-get install -y \
+        git \
+        libicu-dev \
+        libpq-dev \
+        libzip-dev \
     && docker-php-ext-configure mysqli -with-mysqli=mysqlnd \
     && docker-php-ext-configure pdo_mysql -with-pdo-mysql=mysqlnd \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install gettext \
+    && docker-php-ext-install intl \
     && docker-php-ext-install pdo pdo_mysql mysqli \
     && docker-php-ext-install zip
 
