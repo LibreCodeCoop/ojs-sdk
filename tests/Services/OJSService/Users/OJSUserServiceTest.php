@@ -31,15 +31,56 @@ class OJSUserServiceTest extends TestCase
             $args[2] = new ADORecordSet_empty();
             return true;
         });
+
+        HookRegistry::clear('userdao::_insertobject');
+        HookRegistry::register('userdao::_insertobject', function($hookName, $args) {
+            $args[2] = true;
+            return true;
+        });
+
+        HookRegistry::clear('dao::_updatedataobjectsettings');
+        HookRegistry::register('dao::_updatedataobjectsettings', function($hookName, $args) {
+            $args[2] = true;
+            return true;
+        });
+
+        HookRegistry::clear('usergroupdao::_getbyid');
+        HookRegistry::register('usergroupdao::_getbyid', function($hookName, $args) {
+            $args[2] = new ADORecordSet_array();
+            $args[2]->_numOfRows = 1;
+            $args[2]->_currentRow= 0;
+            $args[2]->fields = $args[2]->bind = [
+                'user_group_id' => 1,
+                'role_id' => 1,
+                'context_id' => 1,
+                'is_default' => 1,
+                'show_title' => 1,
+                'permit_self_registration' => 1,
+                'permit_metadata_edit' => 1
+            ];
+            return true;
+        });
+
+        HookRegistry::clear('UserGroupDAO::_returnFromRow');
+        HookRegistry::register('UserGroupDAO::_returnFromRow', function($hookName, $args) {
+            return true;
+        });
+
+        HookRegistry::clear('usergroupdao::_useringroup');
+        HookRegistry::register('usergroupdao::_useringroup', function($hookName, $args) {
+            $args[2] = new ADORecordSet_array();
+            $args[2]->fields[0] = 1;
+            return true;
+        });
         $return = $OjsClient->createUpdateUser([
-            'username' => 'test',
+            'username' => 'jhon',
             'password' => 'test',
-            'email' => 'test@test.coop',
+            'email' => 'jhon.doe@test.coop',
             'mailingAddress' => 'Street 55',
             'locales' => ['en_US'],
             'groups' => [1],// administrator
-            'givenName'     => ['en_US' => 'User'],
-            'familyName'    => ['en_US' => 'Test'],
+            'givenName'     => ['en_US' => 'Jhon'],
+            'familyName'    => ['en_US' => 'Doe'],
             'phone'         => '+123456789',
             'lattes'        => 'https://lattes.com'
         ]);
