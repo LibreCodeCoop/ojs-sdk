@@ -9,24 +9,11 @@ jobs:
       fail-fast: false
       matrix:
         php-versions: ['7.4']
+        server-versions: ['3_2_1-1']
 
     name: php-cs check php${{ matrix.php-versions }}
 
     steps:
-      - name: Checkout OJS
-        uses: actions/checkout@v2
-        with:
-          repository: pkp/ojs
-          path: ojs/
-          ref: ${{ matrix.server-versions }}
-
-      - name: Checkout OJS submodules
-        shell: bash
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1 --git-dir=ojs
-
       - name: Checkout
         uses: actions/checkout@master
 
@@ -34,12 +21,9 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: ${{ matrix.php-versions }}
-          coverage: none
 
       - name: Install Composer dependencies
-        run: |
-          composer install
-          composer --working-dir=ojs/lib/pkp install
+        run: composer install
 
       - name: Run coding standards check
-        run: composer run test
+        run: composer run phpcs

@@ -4,7 +4,7 @@ require_once 'vendor/autoload.php';
 
 chdir(getenv('OJS_WEB_BASEDIR'));
 
-require_once getenv('OJS_WEB_BASEDIR') . '/lib/pkp/tests/phpunit-bootstrap.php';
+require_once './lib/pkp/tests/phpunit-bootstrap.php';
 
 import('lib.pkp.classes.core.PKPRequest');
 import('lib.pkp.classes.core.PKPRouter');

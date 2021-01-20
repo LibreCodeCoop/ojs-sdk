@@ -1,20 +1,27 @@
 <?php
 
-chdir(getenv('OJS_WEB_BASEDIR'));
+
+if (!getenv('OJS_WEB_BASEDIR') && is_dir(dirname(__FILE__).'/../ojs')) {
+    putenv('OJS_WEB_BASEDIR='.dirname(__FILE__) . '/../ojs/');
+}
+
 if (file_exists(getenv('OJS_WEB_BASEDIR') . '/config.inc.php')) {
     return;
 }
-copy('config.TEMPLATE.inc.php', 'config.inc.php');
+
+set_include_path(getenv('OJS_WEB_BASEDIR') . PATH_SEPARATOR . get_include_path() );
+
+copy(getenv('OJS_WEB_BASEDIR').'/config.TEMPLATE.inc.php', getenv('OJS_WEB_BASEDIR').'/config.inc.php');
 require('tools/bootstrap.inc.php');
 
 import('lib.pkp.classes.cliTool.InstallTool');
 
 class OJSInstallTest extends InstallTool {
-	/**
-	 * Constructor.
-	 * @param $argv array command-line arguments
-	 */
-	function __construct(array $params) {
+    /**
+     * Constructor.
+     * @param $argv array command-line arguments
+     */
+    function __construct(array $params) {
         parent::__construct();
         $this->params = $params;
 	}

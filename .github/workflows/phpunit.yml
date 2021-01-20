@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 env:
-  OJS_WEB_BASEDIR: /app/ojs
+  OJS_WEB_BASEDIR: /home/runner/work/ojs-sdk/ojs-sdk/ojs/
   OJS_LOGIN_URL: http://localhost/ojs/index.php/csp/login/signIn
 
 jobs:
@@ -30,34 +30,33 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
       - name: Checkout OJS
-        uses: actions/checkout@v2
+        uses: actions/checkout@master
         with:
           repository: pkp/ojs
-          path: ojs/
           ref: ${{ matrix.server-versions }}
-
-      - name: Checkout OJS submodules
-        shell: bash
-        run: |
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1 --git-dir=ojs
+          path: ojs
+          submodules: true
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@v1
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: gettext, intl, mysql, pdo_mysql
-
-      - name: Install OJS
-        run: |
-          php tests/setupOjs.php
 
       - name: Install Composer dependencies
         run: |
           composer install
           composer --working-dir=ojs/lib/pkp install
+          composer --working-dir=ojs/plugins/paymethod/paypal install
+          composer --working-dir=ojs/plugins/generic/citationStyleLanguage install
+
+      - name: Install OJS
+        run: |
+          php tests/setupOjs.php
 
       - name: PHPUnit
         run: composer unit
