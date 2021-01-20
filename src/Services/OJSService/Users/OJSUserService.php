@@ -3,7 +3,7 @@
 namespace OjsSdk\Services\OJSService\Users;
 
 use GuzzleHttp\Cookie\CookieJar;
-use \DAORegistry;
+use DAORegistry;
 use OjsSdk\Providers\Ojs\OjsProvider;
 
 class OJSUserService
@@ -81,10 +81,10 @@ class OJSUserService
             /** @var UserDAO */
             $userDao = DAORegistry::getDAO('UserDAO');
             $user = $userDao->getUserByEmail($data['email']);
-            if(is_null($user)){            
+            if (is_null($user)) {
                 $user = $userDao->newDataObject();
                 $user->setAllData($data);
-                $user->setPassword(\Validation::encryptCredentials($user->getUsername(),$data['password']));
+                $user->setPassword(\Validation::encryptCredentials($user->getUsername(), $data['password']));
                 $userId = $userDao->insertObject($user);
                 /** @var UserGroupDAO */
                 $userGroupDao = DAORegistry::getDAO('UserGroupDAO');
@@ -93,19 +93,19 @@ class OJSUserService
                         $userGroupDao->assignUserToGroup($userId, $groupId);
                     }
                 }
-            }else{
+            } else {
                 $id = $user->getId();
                 $user->setAllData($data);
                 $user->setId($id);
-                $userDao->updateObject($user);                
+                $userDao->updateObject($user);
             }
         } catch (\Exception $e) {
             throw new \Exception("Error creating OJS user: $e");
         }
          return true;
     }
-    
-    public function changePassword(String $email, String $password) 
+
+    public function changePassword(string $email, string $password)
     {
         OjsProvider::getApplication();
         $userDao = DAORegistry::getDAO('UserDAO');
@@ -115,18 +115,18 @@ class OJSUserService
             $userDao->updateObject($user);
         }
     }
-    public function getUniqueUsername(String $username)
+    public function getUniqueUsername(string $username)
     {
         OjsProvider::getApplication();
         $userDao = DAORegistry::getDAO('UserDAO');
         $i = '';
-        while ($userDao->userExistsByUsername($username.$i)) {
+        while ($userDao->userExistsByUsername($username . $i)) {
             if ($i === '') {
                 $i = 0;
             } else {
                 $i++;
             }
         }
-        return $username.$i;
+        return $username . $i;
     }
 }

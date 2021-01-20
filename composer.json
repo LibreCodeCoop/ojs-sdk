@@ -21,10 +21,17 @@
         "vlucas/phpdotenv": "^3.6"
     },
     "require-dev": {
-        "guzzlehttp/guzzle": "^6.4"
+        "guzzlehttp/guzzle": "^6.4",
+        "squizlabs/php_codesniffer": "^3.5"
     },
     "scripts": {
-        "unit": "phpunit --coverage-clover ./tests/logs/clover.xml --colors=always"
+        "unit": "phpunit --coverage-clover ./tests/logs/clover.xml --colors=always",
+        "phpcs" : "phpcs --standard=PSR12 -n src",
+        "phpcbf" : "phpcbf --standard=PSR12 -n src",
+        "test" : [
+            "@unit",
+            "@phpcs"
+        ]
     },
     "autoload": {
         "psr-4": {
