@@ -89,7 +89,9 @@ class OJSUserService
                 /** @var UserGroupDAO */
                 $userGroupDao = DAORegistry::getDAO('UserGroupDAO');
                 foreach ($data['groups'] as $groupId) {
-                    $userGroupDao->assignUserToGroup($userId, $groupId);
+                    if (!$userGroupDao->userInGroup($userId, $groupId)) {
+                        $userGroupDao->assignUserToGroup($userId, $groupId);
+                    }
                 }
             }else{
                 $id = $user->getId();
