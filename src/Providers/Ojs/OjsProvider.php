@@ -5,18 +5,16 @@ use PluginRegistry;
 
 class OjsProvider
 {
-    private static $loaded = false;
     /**
      * @return \Application
      */
     public static function getApplication()
     {
-        if (self::$loaded) {
+        if (defined('SESSION_DISABLE_INIT')) {
             return;
         }
-        self::$loaded = true;
         define('SESSION_DISABLE_INIT', true);
-        define('INDEX_FILE_LOCATION', getenv('WEB_DOCUMENT_ROOT') .'/ojs/index.php');
+        define('INDEX_FILE_LOCATION', getenv('OJS_WEB_BASEDIR') .'/index.php');
         define('ENV_SEPARATOR', strtolower(substr(PHP_OS, 0, 3)) == 'win' ? ';' : ':');
         if (!defined('DIRECTORY_SEPARATOR')) {
             // Older versions of PHP do not define this
