@@ -13,6 +13,20 @@ jobs:
     name: php-cs check php${{ matrix.php-versions }}
 
     steps:
+      - name: Checkout OJS
+        uses: actions/checkout@v2
+        with:
+          repository: pkp/ojs
+          path: ojs/
+          ref: ${{ matrix.server-versions }}
+
+      - name: Checkout OJS submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1 --git-dir=ojs
+
       - name: Checkout
         uses: actions/checkout@master
 
@@ -22,8 +36,10 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           coverage: none
 
-      - name: Install dependencies
-        run: composer i
+      - name: Install Composer dependencies
+        run: |
+          composer install
+          composer --working-dir=ojs/lib/pkp install
 
       - name: Run coding standards check
         run: composer run test
