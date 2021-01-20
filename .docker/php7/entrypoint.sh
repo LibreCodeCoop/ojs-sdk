@@ -10,5 +10,7 @@ if [ ! -d "vendor" ]; then
     git clone --progress -b "${OJS_VERSION}" --single-branch --depth 1 --recurse-submodules -j 4 https://github.com/pkp/ojs
     cd ojs
     composer --working-dir=lib/pkp install
+    composer --working-dir=plugins/paymethod/paypal install
+    composer --working-dir=plugins/generic/citationStyleLanguage install
 fi
 php-fpm
