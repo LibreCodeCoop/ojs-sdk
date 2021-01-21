@@ -29,16 +29,16 @@ use OjsSdk\Services\OJSService\Users\OJSUserService;
 
 $OjsClient = new OJSUserService();
 $return = $OjsClient->createUpdateUser([
-    'username' => 'jhonusername',
-    'password' => '123password',
-    'email' => 'jhon.doe@test.coop',
+    'username'       => 'jhonusername',
+    'password'       => '123password',
+    'email'          => 'jhon.doe@test.coop',
     'mailingAddress' => 'Street 55',
-    'locales' => ['en_US'],
-    'groups' => [1], // administrator
-    'givenName'     => ['en_US' => 'Jhon'],
-    'familyName'    => ['en_US' => 'Doe'],
-    'phone'         => '+123456789',
-    'lattes'        => 'https://lattes.com'
+    'locales'        => ['en_US'],
+    'groups'         => [1], // administrator
+    'givenName'      => ['en_US' => 'Jhon'],
+    'familyName'     => ['en_US' => 'Doe'],
+    'phone'          => '+123456789',
+    'lattes'         => 'https://lattes.com'
 ]);
 ```
 * changePassword
