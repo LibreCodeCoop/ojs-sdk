@@ -35,7 +35,7 @@ class LogProvider extends Provider
         $instance->logger->pushHandler(new SwiftMailerHandler($mailer, $message, Logger::DEBUG, false));
 
         // Log to file
-        $instance->logger->pushHandler(new StreamHandler(getenv('LOG_DIR') . '/csp1.log', Logger::DEBUG));
+        $instance->logger->pushHandler(new StreamHandler(getenv('LOG_DIR') . '/ojs-sdk.log', Logger::DEBUG));
 
         return $instance;
     }
