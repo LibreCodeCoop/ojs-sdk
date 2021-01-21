@@ -14,12 +14,12 @@ composer require lyseontech/ojs-sdk
 
 OJS installed in the same server is necessary. Inform the path of OJS for all dependencies and the login URL if you need make login and get a user token after login.
 
-| Environment     | Suggested value                                 |
-| --------------- | ----------------------------------------------- |
-| OJS_VERSION     | 3_2_1-1                                         |
-| DB_PASSWD       | root                                            |
-| OJS_WEB_BASEDIR | /app/ojs                                        |
-| OJS_LOGIN_URL   | http://localhost/ojs/index.php/csp/login/signIn |
+| Environment     | Suggested value                                 | Usage                                     |
+| --------------- | ----------------------------------------------- | ----------------------------------------- |
+| OJS_VERSION     | 3_2_1-1                                         | Setup development environment with Docker |
+| DB_PASSWD       | root                                            | Setup development environment with Docker |
+| OJS_WEB_BASEDIR | /app/ojs                                        | For make all                              |
+| OJS_LOGIN_URL   | http://localhost/ojs/index.php/journal/login/signIn | Only for login                            |
 
 ## How to use?
 
