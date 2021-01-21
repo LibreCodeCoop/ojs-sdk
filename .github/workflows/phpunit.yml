@@ -1,4 +1,4 @@
-name: PHPUnit
+name: ci
 
 on:
   pull_request:
@@ -6,11 +6,11 @@ on:
     branches: [ main ]
 
 env:
-  OJS_WEB_BASEDIR: /home/runner/work/ojs-sdk/ojs-sdk/ojs/
+  OJS_WEB_BASEDIR: /home/runner/work/ojs-sdk/ojs-sdk/
   OJS_LOGIN_URL: http://localhost/ojs/index.php/csp/login/signIn
 
 jobs:
-  php:
+  phpunit:
     runs-on: ubuntu-latest
     strategy:
       # do not stop on another job's failure
@@ -47,16 +47,41 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           extensions: gettext, intl, mysql, pdo_mysql
 
+      - name: Install OJS
+        run: |
+          ls -la ojs
+          php tests/setupOjs.php
+
       - name: Install Composer dependencies
         run: |
           composer install
           composer --working-dir=ojs/lib/pkp install
-          composer --working-dir=ojs/plugins/paymethod/paypal install
-          composer --working-dir=ojs/plugins/generic/citationStyleLanguage install
-
-      - name: Install OJS
-        run: |
-          php tests/setupOjs.php
 
       - name: PHPUnit
         run: composer unit
+
+  php-cs-fixer:
+    runs-on: ubuntu-latest
+    strategy:
+      # do not stop on another job's failure
+      fail-fast: false
+      matrix:
+        php-versions: ['7.4']
+        server-versions: ['3_2_1-1']
+
+    name: php-cs check php${{ matrix.php-versions }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Set up php
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: ${{ matrix.php-versions }}
+
+      - name: Install Composer dependencies
+        run: composer install
+
+      - name: Run coding standards check
+        run: composer run phpcs
