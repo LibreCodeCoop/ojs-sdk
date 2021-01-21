@@ -1,6 +1,5 @@
 <?php
 
-
 if (!getenv('OJS_WEB_BASEDIR') && is_dir(dirname(__FILE__).'/../ojs')) {
     putenv('OJS_WEB_BASEDIR='.dirname(__FILE__) . '/../ojs/');
 }
