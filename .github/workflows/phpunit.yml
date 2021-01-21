@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 env:
-  OJS_WEB_BASEDIR: /home/runner/work/ojs-sdk/ojs-sdk/
+  OJS_WEB_BASEDIR: /home/runner/work/ojs-sdk/ojs-sdk/ojs/
   OJS_LOGIN_URL: http://localhost/ojs/index.php/csp/login/signIn
 
 jobs:
@@ -47,15 +47,15 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           extensions: gettext, intl, mysql, pdo_mysql
 
-      - name: Install OJS
-        run: |
-          ls -la ojs
-          php tests/setupOjs.php
-
       - name: Install Composer dependencies
         run: |
           composer install
           composer --working-dir=ojs/lib/pkp install
+          composer --working-dir=ojs/plugins/paymethod/paypal install
+          composer --working-dir=ojs/plugins/generic/citationStyleLanguage install
+
+      - name: Install OJS
+        run: php tests/setupOjs.php
 
       - name: PHPUnit
         run: composer unit
