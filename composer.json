@@ -15,11 +15,8 @@
             "homepage": "https://github.com/vitormattos"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
-    "require": {
-        "vlucas/phpdotenv": "^3.6"
-    },
     "require-dev": {
         "guzzlehttp/guzzle": "^6.4",
         "squizlabs/php_codesniffer": "^3.5"
