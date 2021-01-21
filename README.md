@@ -14,12 +14,12 @@ composer require lyseontech/ojs-sdk
 
 OJS installed in the same server is necessary. Inform the path of OJS for all dependencies and the login URL if you need make login and get a user token after login.
 
-| Environment     | Suggested value                                 |
-| --------------- | ----------------------------------------------- |
-| OJS_VERSION     | 3_2_1-1                                         |
-| DB_PASSWD       | root                                            |
-| OJS_WEB_BASEDIR | /app/ojs                                        |
-| OJS_LOGIN_URL   | http://localhost/ojs/index.php/csp/login/signIn |
+| Environment     | Suggested value                                 | Usage                                     |
+| --------------- | ----------------------------------------------- | ----------------------------------------- |
+| OJS_VERSION     | 3_2_1-1                                         | Setup development environment with Docker |
+| DB_PASSWD       | root                                            | Setup development environment with Docker |
+| OJS_WEB_BASEDIR | /app/ojs                                        | For make all                              |
+| OJS_LOGIN_URL   | http://localhost/ojs/index.php/journal/login/signIn | Only for login                            |
 
 ## How to use?
 
@@ -29,16 +29,16 @@ use OjsSdk\Services\OJSService\Users\OJSUserService;
 
 $OjsClient = new OJSUserService();
 $return = $OjsClient->createUpdateUser([
-    'username' => 'jhonusername',
-    'password' => '123password',
-    'email' => 'jhon.doe@test.coop',
+    'username'       => 'jhonusername',
+    'password'       => '123password',
+    'email'          => 'jhon.doe@test.coop',
     'mailingAddress' => 'Street 55',
-    'locales' => ['en_US'],
-    'groups' => [1], // administrator
-    'givenName'     => ['en_US' => 'Jhon'],
-    'familyName'    => ['en_US' => 'Doe'],
-    'phone'         => '+123456789',
-    'lattes'        => 'https://lattes.com'
+    'locales'        => ['en_US'],
+    'groups'         => [1], // administrator
+    'givenName'      => ['en_US' => 'Jhon'],
+    'familyName'     => ['en_US' => 'Doe'],
+    'phone'          => '+123456789',
+    'lattes'         => 'https://lattes.com'
 ]);
 ```
 * changePassword

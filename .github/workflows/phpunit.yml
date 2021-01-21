@@ -7,7 +7,7 @@ on:
 
 env:
   OJS_WEB_BASEDIR: /home/runner/work/ojs-sdk/ojs-sdk/ojs/
-  OJS_LOGIN_URL: http://localhost/ojs/index.php/csp/login/signIn
+  OJS_LOGIN_URL: http://localhost/ojs/index.php/journal/login/signIn
 
 jobs:
   phpunit:
