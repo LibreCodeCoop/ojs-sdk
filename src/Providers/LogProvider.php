@@ -1,4 +1,5 @@
 <?php
+
 namespace OjsSdk\Providers;
 
 use Monolog\Logger;
@@ -38,7 +39,7 @@ class LogProvider extends Provider
 
         return $instance;
     }
-    
+
     /**
      * @return \Monolog\Logger
      */
@@ -47,7 +48,7 @@ class LogProvider extends Provider
         $instance = self::getInstance();
         return $instance->logger;
     }
-    
+
     public function setErrorHandler()
     {
         // Error Handler

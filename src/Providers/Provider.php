@@ -1,4 +1,5 @@
 <?php
+
 namespace OjsSdk\Providers;
 
 class Provider

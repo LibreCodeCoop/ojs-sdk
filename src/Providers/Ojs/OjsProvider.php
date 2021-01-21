@@ -1,4 +1,5 @@
 <?php
+
 namespace OjsSdk\Providers\Ojs;
 
 use PluginRegistry;
@@ -14,7 +15,7 @@ class OjsProvider
             return;
         }
         define('SESSION_DISABLE_INIT', true);
-        define('INDEX_FILE_LOCATION', getenv('OJS_WEB_BASEDIR') .'/index.php');
+        define('INDEX_FILE_LOCATION', getenv('OJS_WEB_BASEDIR') . '/index.php');
         define('ENV_SEPARATOR', strtolower(substr(PHP_OS, 0, 3)) == 'win' ? ';' : ':');
         if (!defined('DIRECTORY_SEPARATOR')) {
             // Older versions of PHP do not define this

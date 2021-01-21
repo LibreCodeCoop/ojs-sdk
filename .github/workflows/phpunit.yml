@@ -1,0 +1,62 @@
+name: PHPUnit
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+env:
+  OJS_WEB_BASEDIR: /home/runner/work/ojs-sdk/ojs-sdk/ojs/
+  OJS_LOGIN_URL: http://localhost/ojs/index.php/csp/login/signIn
+
+jobs:
+  php:
+    runs-on: ubuntu-latest
+    strategy:
+      # do not stop on another job's failure
+      fail-fast: false
+      matrix:
+        php-versions: ['7.4']
+        databases: ['mysql']
+        server-versions: ['3_2_1-1']
+    name: php${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}
+    services:
+      mysql:
+        image: mariadb
+        ports:
+          - 4444:3306/tcp
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Checkout OJS
+        uses: actions/checkout@master
+        with:
+          repository: pkp/ojs
+          ref: ${{ matrix.server-versions }}
+          path: ojs
+          submodules: true
+
+      - name: Set up php ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: gettext, intl, mysql, pdo_mysql
+
+      - name: Install Composer dependencies
+        run: |
+          composer install
+          composer --working-dir=ojs/lib/pkp install
+          composer --working-dir=ojs/plugins/paymethod/paypal install
+          composer --working-dir=ojs/plugins/generic/citationStyleLanguage install
+
+      - name: Install OJS
+        run: |
+          php tests/setupOjs.php
+
+      - name: PHPUnit
+        run: composer unit
