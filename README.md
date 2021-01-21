@@ -8,4 +8,4 @@ SDK package for the [OJS](https://pkp.sfu.ca/ojs/)
 composer test
 ```
 
->> **PS:** Check the absolute path of configuration file
+> **PS:** Check the absolute path of configuration file
