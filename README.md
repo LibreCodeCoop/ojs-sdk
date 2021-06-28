@@ -1,4 +1,4 @@
-![Test Status](https://github.com/lyseontech/ojs-sdk/workflows/ci/badge.svg?branch=main)
+![Test Status](https://github.com/librecodecoop/ojs-sdk/workflows/ci/badge.svg?branch=main)
 
 # OJS-SDK
 
@@ -7,7 +7,7 @@ SDK package for the [OJS](https://pkp.sfu.ca/ojs/)
 ## Install
 
 ```bash
-composer require lyseontech/ojs-sdk
+composer require librecodecoop/ojs-sdk
 ```
 
 ## Configure
