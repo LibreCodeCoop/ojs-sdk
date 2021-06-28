@@ -1,5 +1,5 @@
 {
-    "name": "lyseontech/ojs-sdk",
+    "name": "librecodecoop/ojs-sdk",
     "description": "SDK package for OJS",
     "keywords": ["ojs", "sdk"],
     "license" : "GPL-3.0-only",
