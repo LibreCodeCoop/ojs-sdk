@@ -9,7 +9,7 @@ class OjsProvider
     /**
      * @return \Application
      */
-    public static function getApplication()
+    public static function getApplication(string $journal = '')
     {
         if (defined('SESSION_DISABLE_INIT')) {
             return;
@@ -55,9 +55,21 @@ class OjsProvider
         $request->setRouter($router);
         \Registry::set('request', $request);
         \AppLocale::$request = \Registry::get('request', true, null);
-        $request = \AppLocale::$request;
-        $plugins = PluginRegistry::loadCategory('generic', true, 1);
+        self::setJournal($journal);
+        PluginRegistry::loadCategory('generic', true);
+        PluginRegistry::loadCategory('pubIds', true);
         chdir($currentDirectory);
         return $application;
+    }
+
+    private static function setJournal($journal)
+    {
+        $configData = \Registry::get('configData');
+        $configData['general']['disable_path_info'] = true;
+        \Registry::set('configData', $configData);
+        import('lib.pkp.classes.plugins.HookRegistry');
+        \HookRegistry::register('Request::getQueryString', function ($hook, &$args) use ($journal) {
+            $args[0] = ($args[0] ? $args[0] . '&' : '') . 'journal=' . $journal;
+        });
     }
 }

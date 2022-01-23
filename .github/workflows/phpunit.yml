@@ -84,4 +84,4 @@ jobs:
         run: composer install
 
       - name: Run coding standards check
-        run: composer run phpcs
+        run: composer cs:check
